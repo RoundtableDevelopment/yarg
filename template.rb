@@ -7,7 +7,6 @@ RAILS_REQUIREMENT = '~> 5.2.0'.freeze
 def build_app!
   # Template set up checks
   assert_minimum_rails_version
-  assert_postgresql
   add_template_repository_to_source_path
 
   # Copy root config files
@@ -70,14 +69,6 @@ def assert_minimum_rails_version
   prompt = "This template requires Rails #{RAILS_REQUIREMENT}. "\
            "You are using #{rails_version}. Continue anyway?"
   exit 1 if no?(prompt)
-end
-
-def assert_postgresql
-  return if IO.read("Gemfile") =~ /^\s*gem ['"]pg['"]/
-  
-  fail Rails::Generators::Error,
-       "This template requires PostgreSQL, "\
-       "but the pg gem isn’t present in your Gemfile."
 end
 
 def apply_bootstrap?
