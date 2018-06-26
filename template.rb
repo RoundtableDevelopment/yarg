@@ -5,16 +5,36 @@ YARG_REPO = 'https://github.com/RoundtableDevelopment/yarg.git'.freeze
 RAILS_REQUIREMENT = '~> 5.2.0'.freeze
 
 def build_app!
+  # Template set up checks
   assert_minimum_rails_version
   assert_postgresql
   add_template_repository_to_source_path
-  template 'ruby-version.tt', '.ruby-version', force: true
-  template 'Gemfile.tt', force: true
 
-  apply "variants/bootstrap/template.rb" if apply_bootstrap?
+  # Copy root config files
+  template 'ruby-version.tt', '.ruby-version', force: true
+  template 'Gemfile.tt', 'Gemfile', force: true
+  copy_file 'gitignore', '.gitignore', force: true
+  template 'example.env.tt' 
+  copy_file 'Procfile'
+  template 'README.md.tt', force: true
+
+  # Copy assets
+  copy_file 'app/assets/javascripts/application.js', 'app/assets/javascripts/application.js', force: true
+  directory 'app/assets/stylesheets', force: true
+  remove_file 'app/assets/stylesheets/application.css'
+
+  # Copy config
+  
+
+  # apply "variants/bootstrap/template.rb" if apply_bootstrap?
 
   after_bundle do
-    puts "Hey we bundled"
+    run  'bin/rake db:create:all'
+    run  'bin/rake db:migrate'
+
+    git :init
+    git add: '.'
+    git commit: %Q{ -m 'Initial commit' }
   end
 end
 
