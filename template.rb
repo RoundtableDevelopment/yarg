@@ -35,9 +35,10 @@ def build_app!
     apply 'variants/skylight/template.rb'     if apply_skylight?
     apply 'variants/sentry/template.rb'       if apply_sentry?
     apply 'variants/simple_form/template.rb'  if apply_simple_form?
+    apply 'variants/react/template.rb'        if apply_react?
 
     # This should run last
-    apply 'variants/haml/template.rb' if apply_haml?
+    apply 'variants/haml/template.rb'         if apply_haml?
 
     run 'bundle binstubs bundler --force'
 
@@ -102,6 +103,10 @@ end
 
 def apply_simple_form?
   @simple_form ||= yes?('Do you want to use Simple Form?')
+end
+
+def apply_react?
+  @react ||= yes?('Do you want to use React?')
 end
 
 build_app!
