@@ -5,6 +5,8 @@
         media: 'all', 
         'data-turbolinks-track': 'reload' %>
 
+    <%%= display_meta_tags site: "<%= app_const_base.titleize %>" %>
+
     <title><%= app_const_base.titleize %></title>
     <%%= csrf_meta_tags %>
     <%%= csp_meta_tag %>
