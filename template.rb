@@ -17,6 +17,7 @@ def build_app!
   copy_file 'Procfile'
   template 'README.md.tt', force: true
 
+  # Copy base application files
   apply 'app/template.rb'
   apply 'config/template.rb'
   apply 'lib/template.rb'
@@ -29,8 +30,12 @@ def build_app!
 
     stop_spring
 
+    # Copy variants as necessary
     apply 'variants/devise/template.rb' if apply_devise?
     apply 'variants/skylight/template.rb' if apply_skylight?
+
+    # This should run last
+    apply 'variants/haml/template.rb' if apply_haml?
 
     run 'bundle binstubs bundler --force'
 
@@ -83,6 +88,10 @@ end
 
 def apply_skylight?
   @skylight ||= yes?('Do you want to use Skylight?')
+end
+
+def apply_haml?
+  @haml ||= yes?('Do you want to use haml?')
 end
 
 build_app!
