@@ -23,17 +23,22 @@ def build_app!
   remove_file 'app/assets/stylesheets/application.css'
 
   # Copy config
-  
 
-  # apply "variants/bootstrap/template.rb" if apply_bootstrap?
 
   after_bundle do
-    run  'bin/rake db:create:all'
-    run  'bin/rake db:migrate'
-
     git :init
     git add: '.'
-    git commit: %Q{ -m 'Initial commit' }
+    git commit: %Q{ -m 'Initial generator setup.' }
+
+    stop_spring
+
+    apply 'variants/devise/template.rb' if apply_devise?
+    apply 'variants/skylight/template.rb' if apply_skylight?
+
+    run 'bundle binstubs bundler --force'
+
+    # rails_command db:create:all'
+    # rails_command db:migrate'
   end
 end
 
@@ -71,8 +76,16 @@ def assert_minimum_rails_version
   exit 1 if no?(prompt)
 end
 
-def apply_bootstrap?
-  yes?('Do you want to use bootstrap?')
+def stop_spring
+  run 'spring stop'
+end
+
+def apply_devise?
+  @devise ||= yes?('Do you want to use Devise?')
+end
+
+def apply_skylight?
+  @skylight ||= yes?('Do you want to use Skylight?')
 end
 
 build_app!
