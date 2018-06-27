@@ -1,4 +1,4 @@
-source_paths.unshift(File.dirname(__FILE__))
+# source_paths.unshift(File.dirname(__FILE__))
 
 copy_file 'app/assets/javascripts/application.js', 'app/assets/javascripts/application.js', force: true
 directory 'app/assets/stylesheets', force: true

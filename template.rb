@@ -19,8 +19,7 @@ def build_app!
 
   apply 'app/template.rb'
   apply 'config/template.rb'
-  # Copy config
-
+  apply 'lib/template.rb'
 
   after_bundle do
     git :init
