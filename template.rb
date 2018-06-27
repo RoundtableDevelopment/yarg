@@ -17,11 +17,8 @@ def build_app!
   copy_file 'Procfile'
   template 'README.md.tt', force: true
 
-  # Copy assets
-  copy_file 'app/assets/javascripts/application.js', 'app/assets/javascripts/application.js', force: true
-  directory 'app/assets/stylesheets', force: true
-  remove_file 'app/assets/stylesheets/application.css'
-
+  apply 'app/template.rb'
+  apply 'config/template.rb'
   # Copy config
 
 
