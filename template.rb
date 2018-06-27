@@ -31,8 +31,9 @@ def build_app!
     stop_spring
 
     # Copy variants as necessary
-    apply 'variants/devise/template.rb' if apply_devise?
+    apply 'variants/devise/template.rb'   if apply_devise?
     apply 'variants/skylight/template.rb' if apply_skylight?
+    apply 'variants/sentry/template.rb'   if apply_sentry?
 
     # This should run last
     apply 'variants/haml/template.rb' if apply_haml?
@@ -91,7 +92,11 @@ def apply_skylight?
 end
 
 def apply_haml?
-  @haml ||= yes?('Do you want to use haml?')
+  @haml ||= yes?('Do you want to use HAML?')
+end
+
+def apply_sentry?
+  @sentry ||= yes?('Do you want to use Sentry?')
 end
 
 build_app!

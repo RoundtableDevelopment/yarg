@@ -5,6 +5,8 @@ run 'bundle install'
 
 unless skylight_token.blank?
   run "bundle exec skylight setup #{skylight_token}"
+
+  # Add the skylight token to the .env file
 end
 
 git add: '.'
