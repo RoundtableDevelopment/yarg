@@ -6,12 +6,6 @@ run 'bundle install'
 
 generate 'devise:install'
 
-insert_into_file(
-  'config/initializers/devise.rb', 
-  "  config.secret_key = ENV.fetch('SECRET_KEY_BASE')\n", 
-  before: /^end/
-)
-
 generate :devise, 'User'
 
 # Since we can expect to need to style the login and
