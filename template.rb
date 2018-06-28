@@ -37,6 +37,7 @@ def build_app!
     apply 'variants/sentry/template.rb'       if apply_sentry?
     apply 'variants/simple_form/template.rb'  if apply_simple_form?
     apply 'variants/react/template.rb'        if apply_react?
+    apply 'variants/active_storage/template.rb' if apply_active_storage?
 
     # This should run last
     apply 'variants/haml/template.rb'         if apply_haml?
@@ -111,6 +112,10 @@ end
 
 def apply_react?
   @react ||= yes?('Do you want to use React?')
+end
+
+def apply_active_storage?
+  @active_storage ||= yes?('Do you want to use Active Storage?')
 end
 
 build_app!
