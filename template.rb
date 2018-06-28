@@ -13,12 +13,13 @@ def build_app!
   template 'ruby-version.tt', '.ruby-version', force: true
   template 'Gemfile.tt', 'Gemfile', force: true
   copy_file 'gitignore', '.gitignore', force: true
-  template 'example.env.tt' 
+  template 'example.env.tt'
   copy_file 'Procfile'
   template 'README.md.tt', force: true
 
   # Copy base application files
   apply 'app/template.rb'
+  apply "bin/template.rb"
   apply 'config/template.rb'
   apply 'lib/template.rb'
   apply 'spec/template.rb'
@@ -40,10 +41,13 @@ def build_app!
     # This should run last
     apply 'variants/haml/template.rb'         if apply_haml?
 
-    run 'bundle binstubs bundler --force'
+    run 'bin/setup'
 
-    # rails_command db:create:all'
-    # rails_command db:migrate'
+    binstubs = %w(annotate bundler)
+    run "bundle binstubs #{binstubs.join(' ')} --force"
+
+    git add: '.'
+    git commit: %Q{ -m 'Completed app templating' }
   end
 end
 
