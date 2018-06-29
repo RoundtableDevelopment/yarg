@@ -22,10 +22,10 @@ gem 'jquery-rails'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
-  gem 'annotate'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.7'
+  gem 'pry-rails'
 end
 
 group :test do
@@ -43,6 +43,8 @@ group :development do
   gem 'letter_opener'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'better_errors'
+  gem 'annotate'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
