@@ -55,7 +55,7 @@ def build_app!
     run 'bin/setup'
 
     debug_print('Updating your binstubs')
-    binstubs = %w(annotate bundler)
+    binstubs = %w(annotate bundler sidekiq)
     run "bundle binstubs #{binstubs.join(' ')} --force"
 
     git add: '.'
@@ -102,13 +102,19 @@ end
 def select_variants
   @devise         = yes?('Do you want to use Devise for user authentication?', :blue)
   @pundit         = yes?('Do you want to use Pundit for user authorization?', :blue) if @devise
+  
   @skylight       = yes?('Do you want to use Skylight for performance monitoring?', :blue)
   @skylight_token = ask('Enter your skylight token: ', :green) if @skylight
+  
   @haml           = yes?('Do you want to use HAML instead of ERB view templates?', :blue)
+  
   @sentry         = yes?('Do you want to use Sentry for error tracking?', :blue)
   @sentry_dsn     = ask('Enter your Sentry DSN url:') if @sentry
+  
   @simple_form    = yes?('Do you want to use Simple Form for rails forms?', :blue)
+  
   @react          = yes?('Do you want to use React?', :blue)
+  
   @active_storage = yes?('Do you want to use Active Storage for storing files?', :blue)
 end
 
