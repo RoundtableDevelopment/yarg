@@ -1,11 +1,10 @@
 source_dir = 'variants/sentry'.freeze
 
 insert_into_file 'Gemfile', "gem 'sentry-raven'\n", after: /["']kaminari['"]\n/
-sentry_dsn = ask('Enter your Sentry DSN url:')
 
 run 'bundle install'
 
-unless sentry_dsn.blank?
+unless @sentry_dsn.blank?
   # Add the sentry token to the .env file
 end
 
