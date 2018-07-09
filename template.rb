@@ -33,6 +33,7 @@ def build_app!
 
     # Copy variants as necessary
     apply 'variants/devise/template.rb'       if apply_devise?
+    apply 'variants/pundit/template.rb'       if apply_devise? && apply_pundit?
     apply 'variants/skylight/template.rb'     if apply_skylight?
     apply 'variants/sentry/template.rb'       if apply_sentry?
     apply 'variants/simple_form/template.rb'  if apply_simple_form?
@@ -116,6 +117,10 @@ end
 
 def apply_active_storage?
   @active_storage ||= yes?('Do you want to use Active Storage?')
+end
+
+def apply_pundit?
+  @pundit ||= yes?('Do you want to use Pundit?')
 end
 
 build_app!
