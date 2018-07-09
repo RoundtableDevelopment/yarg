@@ -5,10 +5,12 @@ YARG_REPO = 'https://github.com/RoundtableDevelopment/yarg.git'.freeze
 RAILS_REQUIREMENT = '~> 5.2.0'.freeze
 
 def build_app!
+  debug_print('Checking your environment setup...')
   # Template set up checks
   assert_minimum_rails_version
   add_template_repository_to_source_path
 
+  debug_print('Copying root config files...')
   # Copy root config files
   template 'ruby-version.tt', '.ruby-version', force: true
   template 'Gemfile.tt', 'Gemfile', force: true
@@ -17,6 +19,7 @@ def build_app!
   copy_file 'Procfile'
   template 'README.md.tt', force: true
 
+  debug_print('Templating app...')
   # Copy base application files
   apply 'app/template.rb'
   apply "bin/template.rb"
@@ -31,24 +34,34 @@ def build_app!
 
     stop_spring
 
+    debug_print('Please select your application options...')
+    select_variants
+    debug_print('Implementing your selections...')
+
     # Copy variants as necessary
-    apply 'variants/devise/template.rb'       if apply_devise?
-    apply 'variants/skylight/template.rb'     if apply_skylight?
-    apply 'variants/sentry/template.rb'       if apply_sentry?
-    apply 'variants/simple_form/template.rb'  if apply_simple_form?
-    apply 'variants/react/template.rb'        if apply_react?
-    apply 'variants/active_storage/template.rb' if apply_active_storage?
+    apply 'variants/devise/template.rb'         if @devise
+    apply 'variants/pundit/template.rb'         if @devise && @pundit
+    apply 'variants/skylight/template.rb'       if @skylight
+    apply 'variants/sentry/template.rb'         if @sentry
+    apply 'variants/simple_form/template.rb'    if @simple_form
+    apply 'variants/react/template.rb'          if @react
+    apply 'variants/active_storage/template.rb' if @active_storage
 
-    # This should run last
-    apply 'variants/haml/template.rb'         if apply_haml?
+    # This should run last since it converts all generated ERB
+    # to HAML
+    apply 'variants/haml/template.rb'           if @haml
 
+    debug_print('Running bin/setup to finish setting up your environment...')
     run 'bin/setup'
 
-    binstubs = %w(annotate bundler)
+    debug_print('Updating your binstubs')
+    binstubs = %w(annotate bundler sidekiq)
     run "bundle binstubs #{binstubs.join(' ')} --force"
 
     git add: '.'
     git commit: %Q{ -m 'Completed app templating' }
+
+    debug_print('Success!')
   end
 end
 
@@ -86,36 +99,33 @@ def assert_minimum_rails_version
   exit 1 if no?(prompt)
 end
 
+def select_variants
+  @devise         = yes?('Do you want to use Devise for user authentication?', :blue)
+  @pundit         = yes?('Do you want to use Pundit for user authorization?', :blue) if @devise
+  
+  @skylight       = yes?('Do you want to use Skylight for performance monitoring?', :blue)
+  @skylight_token = ask('Enter your skylight token: ', :green) if @skylight
+  
+  @haml           = yes?('Do you want to use HAML instead of ERB view templates?', :blue)
+  
+  @sentry         = yes?('Do you want to use Sentry for error tracking?', :blue)
+  @sentry_dsn     = ask('Enter your Sentry DSN url:') if @sentry
+  
+  @simple_form    = yes?('Do you want to use Simple Form for rails forms?', :blue)
+  
+  @react          = yes?('Do you want to use React?', :blue)
+  
+  @active_storage = yes?('Do you want to use Active Storage for storing files?', :blue)
+end
+
 def stop_spring
   run 'spring stop'
 end
 
-def apply_devise?
-  @devise ||= yes?('Do you want to use Devise?')
-end
-
-def apply_skylight?
-  @skylight ||= yes?('Do you want to use Skylight?')
-end
-
-def apply_haml?
-  @haml ||= yes?('Do you want to use HAML?')
-end
-
-def apply_sentry?
-  @sentry ||= yes?('Do you want to use Sentry?')
-end
-
-def apply_simple_form?
-  @simple_form ||= yes?('Do you want to use Simple Form?')
-end
-
-def apply_react?
-  @react ||= yes?('Do you want to use React?')
-end
-
-def apply_active_storage?
-  @active_storage ||= yes?('Do you want to use Active Storage?')
+def debug_print(message = '')
+  puts "==================="
+  puts message
+  puts "==================="
 end
 
 build_app!

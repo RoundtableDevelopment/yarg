@@ -1,7 +1,17 @@
 # source_paths.unshift(File.dirname(__FILE__))
 
+insert_into_file "config/application.rb", before: /^  end/ do
+  <<-EOF
+  
+    # Use sidekiq to process Active Jobs (e.g. ActionMailer's deliver_later)
+    config.active_job.queue_adapter = :sidekiq
+
+  EOF
+end
+
 template 'config/database.yml.tt', force: true
 copy_file 'config/puma.rb', force: true
+copy_file "config/sidekiq.yml"
 
 apply "config/environments/development.rb"
 apply "config/environments/production.rb"
