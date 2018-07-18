@@ -17,6 +17,7 @@ def build_app!
   copy_file 'gitignore', '.gitignore', force: true
   template 'example.env.tt'
   copy_file 'Procfile'
+  copy_file 'Procfile.dev'
   template 'README.md.tt', force: true
 
   debug_print('Templating app...')

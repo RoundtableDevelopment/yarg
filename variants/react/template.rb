@@ -5,7 +5,7 @@ run 'bundle install'
 rails_command 'webpacker:install'
 rails_command 'webpacker:install:react'
 
-insert_into_file 'Procfile', after: /development.log\n/ do
+insert_into_file 'Procfile.dev', after: /development.log\n/ do
   'webpacker: bin/webpack-dev-server'
 end
 

@@ -8,7 +8,7 @@
 .DS_Store
 
 # Redis db dump
-dump.db
+dump.rdb
 
 # Ignore IDE fragments
 .idea
