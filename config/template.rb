@@ -22,3 +22,4 @@ copy_file 'config/initializers/generators.rb', force: true
 copy_file 'config/initializers/kaminari.rb'
 copy_file 'config/initializers/meta_tags.rb'
 copy_file 'config/initializers/rotate_log.rb'
+copy_file 'config/initializers/sidekiq.rb'
