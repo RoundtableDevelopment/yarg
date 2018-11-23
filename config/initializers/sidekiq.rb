@@ -4,9 +4,9 @@
 # copy one of those to a separate redis instance if it's necessary
 # in the future.
 Sidekiq.configure_server do |config|
-  config.redis = { url: "#{ENV.fetch('REDIS_URL')}/1" }
+  config.redis = { url: "#{ENV['REDIS_URL']}/1" }
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { size: 3, url: "#{ENV.fetch('REDIS_URL')}/1" }
+  config.redis = { size: 3, url: "#{ENV['REDIS_URL']}/1" }
 end
