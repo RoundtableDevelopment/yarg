@@ -28,6 +28,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.7'
   gem 'pry-rails'
   gem 'awesome_print'
+  gem 'webmock'
 end
 
 group :test do
